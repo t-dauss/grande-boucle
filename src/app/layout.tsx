@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ServiceWorkerRegister } from "@/lib/pwa/register-sw";
+import { PushSubscribeButton } from "@/lib/pwa/PushSubscribeButton";
 
 export const metadata: Metadata = {
   title: "Maillot Jaune Predictor",
@@ -12,7 +14,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ServiceWorkerRegister />
+        <div className="fixed bottom-4 right-4 z-50">
+          <PushSubscribeButton />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
