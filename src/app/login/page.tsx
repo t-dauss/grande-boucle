@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 
@@ -9,7 +9,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode]         = useState<"magic" | "password">("magic");
@@ -45,8 +45,6 @@ export default function LoginPage() {
     setStatus("loading");
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    console.log("SUPABASE ERROR:", error);
-    console.log("REDIRECT TO:", next);
 
     if (error) {
       setStatus("error");
@@ -73,7 +71,6 @@ export default function LoginPage() {
         <p className="text-center text-zinc-300">{message}</p>
       ) : (
         <>
-          {/* Toggle */}
           <div className="flex w-full rounded-lg border border-zinc-700 overflow-hidden">
             <button
               onClick={() => { setMode("magic"); setStatus("idle"); }}
@@ -152,5 +149,13 @@ export default function LoginPage() {
         </>
       )}
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
