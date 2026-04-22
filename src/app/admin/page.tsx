@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionUser, isAdminEmail, supabaseAdmin } from "@/lib/supabase/server";
 import { StageSeedEditor } from "./stage-seed-editor";
+import { PushNotificationSender } from "./PushNotificationSender";
 
 async function getStages() {
   if (!supabaseAdmin) return [];
@@ -89,6 +90,8 @@ export default async function AdminPage() {
           ))}
         </div>
       </section>
+
+      <PushNotificationSender />
 
       <StageSeedEditor
         initialStages={stages.map((stage) => ({
